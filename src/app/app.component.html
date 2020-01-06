@@ -3,7 +3,7 @@
     <div ngbDropdown class="col col-6">
       <div ngbDropdown>
         <button class="btn btn-outline-primary btn-block" ngbDropdownToggle>{{selectedState}}</button>
-        <div ngbDropdownMenu class="col col-12 text-center">
+        <div ngbDropdownMenu class="col col-12 text-center dropdown-scroll">
           <button class="btn btn-block" ngbDropdownItem *ngFor="let state of states" (click)="changeSelectedState(state)">
             {{state}}
           </button>
@@ -15,8 +15,8 @@
     <div class="col col-lg-6 col-md-12">
       <div ngbDropdown>
         <div ngbDropdown>
-          <button class="btn btn-outline-primary btn-block" [disabled]="!stateSelected" ngbDropdownToggle>{{selectedCity}}</button>
-          <div ngbDropdownMenu class="col col-12 text-center">
+          <button class="btn btn-outline-primary btn-block" ngbDropdownToggle>{{selectedCity}}</button>
+          <div ngbDropdownMenu class="col col-12 text-center dropdown-scroll">
             <button class="btn btn-primary btn-block" ngbDropdownItem *ngFor="let city of cities" (click)="changeSelectedCity(city)">
               {{city}}
             </button>
