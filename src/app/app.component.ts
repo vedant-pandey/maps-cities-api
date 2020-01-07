@@ -1,6 +1,8 @@
 import { 
           Component, 
-          OnInit 
+          OnInit, 
+          ViewChild,
+          ElementRef
        }              from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -16,7 +18,14 @@ interface DistrictInfo {
   styleUrls   : ['./app.component.scss']
 })
 
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit {
+
+  @ViewChild('mapContainer', {static : false}) gMap : ElementRef
+
+  map        : google.maps.Map
+  mapOptions : google.maps.MapOptions = {
+    zoom : 10
+  }
 
   selectedState : string  = 'Select a state'
   selectedCity  : string  = 'Select a city'
@@ -43,7 +52,15 @@ export class AppComponent implements OnInit{
         )
       ]
     })
-    
+  }
+
+  ngAfterViewInit() {
+    this.mapInitializer(new google.maps.LatLng(10,20))
+  }
+
+  mapInitializer(coordiantes : google.maps.LatLng) {
+    this.mapOptions.center = coordiantes
+    this.map = new google.maps.Map(this.gMap.nativeElement, this.mapOptions)
   }
 
   changeSelectedState(state : string) {
@@ -61,5 +78,10 @@ export class AppComponent implements OnInit{
 
   changeSelectedCity(city : string) {
     this.selectedCity = city
+    const mapResp = this.http.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${this.selectedCity.split(' ').join('+')},+${this.selectedState.split(' ').join('+')},+india&key=AIzaSyBPY0n8Ucv74WlwSRq2kDC4jvU8qOnExzk`)
+
+    mapResp.subscribe((value : any) => {
+      this.mapInitializer(value.results[0].geometry.location)
+    })
   }
 }
